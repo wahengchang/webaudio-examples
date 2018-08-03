@@ -22,11 +22,15 @@
 
      b.addEventListener("click", function(e) {
        if (!clicked) {
+        console.log('1 -=-=-=-=-=-= handleClick')
+
            mediaRecorder.start();
            osc.start(0);
            e.target.innerHTML = "Stop recording";
            clicked = true;
          } else {
+          console.log('2 -=-=-=-=-=-= handleClick')
+
            mediaRecorder.requestData();
            mediaRecorder.stop();
            osc.stop(0);
@@ -35,6 +39,9 @@
      });
 
      mediaRecorder.ondataavailable = function(evt) {
+      console.log(' -=-=-=-= ondataavailable -=-=-=-=')
+      console.log('evt.data: ', evt.data)
+
        // push each chunk (blobs) in an array
        chunks.push(evt.data);
      };
@@ -42,7 +49,12 @@
      mediaRecorder.onstop = function(evt) {
        // Make blob out of our blobs, and open it.
        var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+
+            console.log('blob: ', blob)
+            console.log('chunks: ', chunks)
+
        var audioTag = document.createElement('audio');
+       console.log('URL.createObjectURL(blob): ', URL.createObjectURL(blob))
        document.querySelector("audio").src = URL.createObjectURL(blob);
      };
     </script>
